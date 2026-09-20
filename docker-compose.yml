@@ -1,0 +1,49 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: quetzalcoatl_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_pass}
+      MYSQL_DATABASE: ${DB_NAME:-flights_db}
+      MYSQL_USER: ${DB_USER:-flights_user}
+      MYSQL_PASSWORD: ${DB_PASS:-flights_pass}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  web:
+    build: .
+    container_name: quetzalcoatl_web
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_NAME: ${DB_NAME:-flights_db}
+      DB_USER: ${DB_USER:-flights_user}
+      DB_PASS: ${DB_PASS:-flights_pass}
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    volumes:
+      - ./src:/var/www/html
+
+  phpmyadmin:
+    image: phpmyadmin:5
+    container_name: quetzalcoatl_pma
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+    ports:
+      - "${PMA_PORT:-8081}:80"
+
+volumes:
+  db_data:
