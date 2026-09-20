@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buscar vuelos · Quetzalcoatl Aerolínea</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="search">
+<header id="nav"></header>
+<main>
+  <h1>Buscar vuelos</h1>
+  <div id="msg" class="msg" hidden role="alert"></div>
+  <form id="form-busqueda" class="tarjeta">
+    <div class="fila">
+      <div class="campo"><label for="origin">Origen</label>
+        <select id="origin" name="origin"><option value="">Cualquiera</option></select></div>
+      <div class="campo"><label for="destination">Destino</label>
+        <select id="destination" name="destination"><option value="">Cualquiera</option></select></div>
+      <div class="campo"><label for="date">Fecha de salida</label><input id="date" name="date" type="date"></div>
+      <div class="campo"><label for="passengers">Pasajeros</label><input id="passengers" name="passengers" type="number" min="1" max="9" value="1"></div>
+      <button type="submit">Buscar</button>
+    </div>
+  </form>
+  <section id="resultados" class="lista" aria-live="polite">
+    <p class="vacio">Elige tus criterios y pulsa Buscar.</p>
+  </section>
+</main>
+
+<dialog id="dlg-reserva">
+  <h2>Confirmar reserva y pago</h2>
+  <div id="dlg-resumen" class="resumen"></div>
+  <div id="dlg-msg" class="msg" hidden role="alert"></div>
+  <form id="form-reserva">
+    <div class="campo"><label for="card_name">Nombre en la tarjeta</label><input id="card_name" name="card_name" required autocomplete="cc-name"></div>
+    <div class="campo"><label for="card_number">Número de tarjeta</label><input id="card_number" name="card_number" inputmode="numeric" required placeholder="4111 1111 1111 1111" autocomplete="cc-number"></div>
+    <div class="fila">
+      <div class="campo"><label for="card_exp">Vigencia (MM/AA)</label><input id="card_exp" name="card_exp" required placeholder="12/29" autocomplete="cc-exp"></div>
+      <div class="campo"><label for="card_cvv">CVV</label><input id="card_cvv" name="card_cvv" inputmode="numeric" required maxlength="4" autocomplete="cc-csc"></div>
+    </div>
+    <div class="botones">
+      <button type="button" id="dlg-cancelar" class="secundario">Volver</button>
+      <button type="submit">Pagar y reservar</button>
+    </div>
+  </form>
+  <p class="meta">Pago simulado con fines académicos. No se guarda el número completo de la tarjeta.</p>
+</dialog>
+<script src="scripts.js"></script>
+</body>
+</html>
